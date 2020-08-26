@@ -19,12 +19,14 @@ package dispatcher
 import (
 	"context"
 	"errors"
+	"net/http"
 	"net/url"
 	"testing"
 
 	"knative.dev/eventing/pkg/channel/fanout"
 
 	"github.com/Shopify/sarama"
+	"github.com/cloudevents/sdk-go/v2/binding"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"go.uber.org/zap"
@@ -378,7 +380,6 @@ func TestDispatcher_UpdateConfig(t *testing.T) {
 	}
 }
 
-/*
 func TestSubscribeError(t *testing.T) {
 	cf := &mockKafkaConsumerFactory{createErr: true}
 	d := &KafkaDispatcher{
@@ -459,7 +460,7 @@ func TestNewDispatcher(t *testing.T) {
 		t.Errorf("Expected error want %s, got %s", "message receiver is not set", err)
 	}
 }
-*/
+
 var sortStrings = cmpopts.SortSlices(func(x, y string) bool {
 	return x < y
 })
