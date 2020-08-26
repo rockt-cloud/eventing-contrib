@@ -10,15 +10,15 @@ import (
 	"github.com/cloudevents/sdk-go/v2/binding/format"
 )
 
-// Message implements binding.Message by wrapping an *primitive.Message.
+// Message implements binding.Message by wrapping an *primitive.MessageExt.
 // This message *can* be read several times safely
 type Message struct {
-	Msg *primitive.Message
+	Msg []*primitive.MessageExt
 }
 
-// NewMessage wraps a *primitive.Message in a binding.Message.
+// NewMessage wraps a *primitive.MessageExt in a binding.Message.
 // The returned message *can* be read several times safely
-func NewMessage(msg *primitive.Message) *Message {
+func NewMessageFromConsumerMessage(msg []*primitive.MessageExt) *Message {
 	return &Message{Msg: msg}
 }
 
@@ -29,7 +29,7 @@ func (m *Message) ReadEncoding() binding.Encoding {
 }
 
 func (m *Message) ReadStructured(ctx context.Context, encoder binding.StructuredWriter) error {
-	return encoder.SetStructuredEvent(ctx, format.JSON, bytes.NewReader(m.Msg.body))
+	return encoder.SetStructuredEvent(ctx, format.JSON, bytes.NewReader(m.Msg[0].Message.Body))
 }
 
 func (m *Message) ReadBinary(context.Context, binding.BinaryWriter) error {

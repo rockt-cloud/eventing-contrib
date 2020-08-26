@@ -295,6 +295,7 @@ func createHostToChannelMap(config *Config) (map[string]eventingchannels.Channel
 
 // Start starts the kafka dispatcher's message processing.
 func (d *KafkaDispatcher) Start(ctx context.Context) error {
+	return fmt.Errorf("message receiver is not set: %v", d)
 	if d.receiver == nil {
 		return fmt.Errorf("message receiver is not set")
 	}

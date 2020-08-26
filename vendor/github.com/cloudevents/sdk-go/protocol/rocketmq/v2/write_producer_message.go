@@ -35,7 +35,7 @@ func (w *rocketmqMessageWriter) SetStructuredEvent(ctx context.Context, format f
 		return err
 	}
 
-	w.body = string(buf.Bytes())
+	w.Body = buf.Bytes()
 	return nil
 }
 

@@ -1,0 +1,8 @@
+approvers:
+  - rocketmq-approvers
+
+reviewers:
+  - rocketmq-reviewers
+
+labels:
+  - area/RocketMQ
