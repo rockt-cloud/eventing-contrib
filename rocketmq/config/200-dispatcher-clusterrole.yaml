@@ -16,29 +16,66 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: rocketmq-ch-dispatcher
+  labels:
+    contrib.eventing.knative.dev/release: devel
 rules:
   - apiGroups:
       - messaging.knative.dev
     resources:
       - rocketmqchannels
-      - rocketmqchannels/status
     verbs:
       - get
       - list
       - watch
-      - update
       - patch
   - apiGroups:
       - messaging.knative.dev
     resources:
-      - rocketmqchannels/finalizers
+      - rocketmqchannels/status
     verbs:
+      - get
       - update
+      - patch
   - apiGroups:
       - "" # Core API group.
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+      - update
+  - apiGroups:
+      - messaging.knative.dev
+    resources:
+      - rocketmqchannels
+    verbs:
+      - get
+      - list
+      - watch
+      - patch
+  - apiGroups:
+      - ""
     resources:
       - configmaps
     verbs:
       - get
       - list
       - watch
+  - apiGroups:
+      - "" # Core API Group.
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - "coordination.k8s.io"
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update

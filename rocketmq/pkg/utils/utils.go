@@ -17,7 +17,11 @@ limitations under the License.
 package utils
 
 import (
+	"errors"
+	"fmt"
 	"strings"
+
+	"knative.dev/pkg/configmap"
 )
 
 const (
@@ -25,7 +29,7 @@ const (
 	MaxIdleConnectionsKey        = "maxIdleConns"
 	MaxIdleConnectionsPerHostKey = "maxIdleConnsPerHost"
 
-	RocketmqChannelSeparator = "."
+	RocketmqChannelSeparator = "_"
 
 	knativeRocketmqTopicPrefix = "knative-messaging-rocketmq"
 
@@ -41,12 +45,39 @@ type RocketmqConfig struct {
 }
 
 // GetRocketmqConfig returns the details of the Rocketmq cluster.
-func GetRocketmqConfig() (*RocketmqConfig, error) {
-	return &RocketmqConfig{
-		Brokers:             []string{DefaultBrokers},
+func GetRocketmqConfig(configMap map[string]string) (*RocketmqConfig, error) {
+	if len(configMap) == 0 {
+		return nil, fmt.Errorf("missing configuration")
+	}
+
+	config := &RocketmqConfig{
 		MaxIdleConns:        DefaultMaxIdleConns,
 		MaxIdleConnsPerHost: DefaultMaxIdleConnsPerHost,
-	}, nil
+	}
+
+	var bootstrapServers string
+
+	err := configmap.Parse(configMap,
+		configmap.AsString(BrokerConfigMapKey, &bootstrapServers),
+		configmap.AsInt32(MaxIdleConnectionsKey, &config.MaxIdleConns),
+		configmap.AsInt32(MaxIdleConnectionsPerHostKey, &config.MaxIdleConnsPerHost),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if bootstrapServers == "" {
+		return nil, errors.New("missing or empty key bootstrapServers in configuration")
+	}
+	bootstrapServersSplitted := strings.Split(bootstrapServers, ",")
+	for _, s := range bootstrapServersSplitted {
+		if len(s) == 0 {
+			return nil, fmt.Errorf("empty %s value in configuration", BrokerConfigMapKey)
+		}
+	}
+	config.Brokers = bootstrapServersSplitted
+
+	return config, nil
 }
 
 func TopicName(separator, namespace, name string) string {

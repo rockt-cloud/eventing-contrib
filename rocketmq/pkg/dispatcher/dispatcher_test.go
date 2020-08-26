@@ -33,6 +33,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 
+	"knative.dev/eventing-contrib/rocketmq/pkg/utils"
 	eventingchannels "knative.dev/eventing/pkg/channel"
 	"knative.dev/eventing/pkg/channel/fanout"
 	_ "knative.dev/pkg/system/testing"
@@ -134,6 +135,7 @@ func TestDispatcher_UpdateConfig(t *testing.T) {
 				"a.b.c.d": {Name: "test-channel", Namespace: "default"},
 			},
 		}, /*
+			//not test together when using non-mock client
 			{
 				name: "single channel w/ existing subscriptions",
 				oldConfig: &Config{
@@ -291,9 +293,8 @@ func TestDispatcher_UpdateConfig(t *testing.T) {
 				channelSubscriptions: make(map[eventingchannels.ChannelReference][]types.UID),
 				subsConsumers:        make(map[types.UID]rocketmq.PushConsumer),
 				subscriptions:        make(map[types.UID]Subscription),
-				//topicFunc:            utils.TopicName,
-				topicFunc: "TopicTest",
-				logger:    zaptest.NewLogger(t),
+				topicFunc:            utils.TopicName,
+				logger:               zaptest.NewLogger(t),
 			}
 			d.setHostToChannelMap(map[string]eventingchannels.ChannelReference{})
 

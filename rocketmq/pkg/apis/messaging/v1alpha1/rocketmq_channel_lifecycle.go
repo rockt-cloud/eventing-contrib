@@ -137,11 +137,11 @@ func (cs *RocketmqChannelStatus) MarkServiceTrue() {
 	rc.Manage(cs).MarkTrue(RocketmqChannelConditionServiceReady)
 }
 
-func (cs *RocketmqChannelStatus) MarkchannelServiceFailed(reason, messageFormat string, messageA ...interface{}) {
+func (cs *RocketmqChannelStatus) MarkChannelServiceFailed(reason, messageFormat string, messageA ...interface{}) {
 	rc.Manage(cs).MarkFalse(RocketmqChannelConditionChannelServiceReady, reason, messageFormat, messageA...)
 }
 
-func (cs *RocketmqChannelStatus) MarkchannelServiceTrue() {
+func (cs *RocketmqChannelStatus) MarkChannelServiceTrue() {
 	rc.Manage(cs).MarkTrue(RocketmqChannelConditionChannelServiceReady)
 }
 
@@ -161,10 +161,10 @@ func (cs *RocketmqChannelStatus) MarkTopicFailed(reason, messageFormat string, m
 	rc.Manage(cs).MarkFalse(RocketmqChannelConditionTopicReady, reason, messageFormat, messageA...)
 }
 
-func (cs *RocketmqChannelStatus) MarkconfigTrue() {
+func (cs *RocketmqChannelStatus) MarkConfigTrue() {
 	rc.Manage(cs).MarkTrue(RocketmqChannelConditionConfigReady)
 }
 
-func (cs *RocketmqChannelStatus) MarkconfigFailed(reason, messageFormat string, messageA ...interface{}) {
+func (cs *RocketmqChannelStatus) MarkConfigFailed(reason, messageFormat string, messageA ...interface{}) {
 	rc.Manage(cs).MarkFalse(RocketmqChannelConditionConfigReady, reason, messageFormat, messageA...)
 }

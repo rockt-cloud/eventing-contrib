@@ -58,13 +58,12 @@ const (
 	rcName                = "test-rc"
 	testDispatcherImage   = "test-image"
 	channelServiceAddress = "test-rc-rn-channel.test-namespace.svc.cluster.local"
-	brokerName            = "127.0.0.1:9876"
+	brokerName            = "test-broker"
 	finalizerName         = "rocketmqchannels.messaging.knative.dev"
 )
 
 var (
 	finalizerUpdatedEvent = Eventf(corev1.EventTypeNormal, "FinalizerUpdate", `Updated "test-rc" finalizers`)
-	testAdmin             admin.Admin
 )
 
 func init() {
@@ -84,6 +83,17 @@ func TestAllCases(t *testing.T) {
 			Name: "key not found",
 			// Make sure Reconcile handles good keys that don't exist.
 			Key: "foo/not-found",
+		}, {
+			Name: "deleting",
+			Key:  rcKey,
+			Objects: []runtime.Object{
+				reconcilerocketmqtesting.NewRocketmqChannel(rcName, testNS,
+					reconcilerocketmqtesting.WithInitRocketmqChannelConditions,
+					reconcilerocketmqtesting.WithRocketmqChannelDeleted)},
+			WantErr: false,
+			WantEvents: []string{
+				Eventf(corev1.EventTypeNormal, "RocketmqChannelReconciled", `RocketmqChannel reconciled: "test-namespace/test-rc"`),
+			},
 		}, {
 			Name: "deployment does not exist, automatically created and patching finalizers",
 			Key:  rcKey,
@@ -325,17 +335,15 @@ func TestAllCases(t *testing.T) {
 			deploymentLister:        listers.GetDeploymentLister(),
 			serviceLister:           listers.GetServiceLister(),
 			endpointsLister:         listers.GetEndpointsLister(),
-			//rocketmqClusterAdmin:    &mockAdmin{},
-			rocketmqClusterAdmin: createClient(t),
-			rocketmqClientSet:    fakerocketmqclient.Get(ctx),
-			KubeClientSet:        kubeclient.Get(ctx),
-			EventingClientSet:    eventingClient.Get(ctx),
+			rocketmqClusterAdmin:    &mockAdmin{},
+			rocketmqClientSet:       fakerocketmqclient.Get(ctx),
+			KubeClientSet:           kubeclient.Get(ctx),
+			EventingClientSet:       eventingClient.Get(ctx),
 		}
 		return rocketmqchannel.NewReconciler(ctx, logging.FromContext(ctx), r.rocketmqClientSet, listers.GetRocketmqChannelLister(), controller.GetEventRecorder(ctx), r)
 	}, zap.L()))
 }
 
-/*
 type mockAdmin struct{}
 
 func (ma *mockAdmin) CreateTopic(ctx context.Context, opts ...admin.OptionCreate) error {
@@ -348,21 +356,9 @@ func (ma *mockAdmin) Close() error {
 
 func (ma *mockAdmin) DeleteTopic(ctx context.Context, opts ...admin.OptionDelete) error {
 	return nil
+}
 
 var _ admin.Admin = (*mockAdmin)(nil)
-}
-*/
-// Use real client to test
-func createClient(t *testing.T) admin.Admin {
-	if testAdmin == nil {
-		var err error
-		testAdmin, err = resources.MakeClient(controllerAgentName, []string{brokerName})
-		if err != nil {
-			t.Errorf("Create Rocketmq client Error: %v", err)
-		}
-	}
-	return testAdmin
-}
 
 func makeDeploymentWithImage(image string) *appsv1.Deployment {
 	return resources.MakeDispatcher(resources.DispatcherArgs{

@@ -21,9 +21,9 @@ package fake
 import (
 	context "context"
 
-	externalversions "knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions"
-	fake "knative.dev/eventing-contrib/tmp2/pkg/client/injection/client/fake"
-	factory "knative.dev/eventing-contrib/tmp2/pkg/client/injection/informers/factory"
+	externalversions "knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions"
+	fake "knative.dev/eventing-contrib/rocketmq/pkg/client/injection/client/fake"
+	factory "knative.dev/eventing-contrib/rocketmq/pkg/client/injection/informers/factory"
 	controller "knative.dev/pkg/controller"
 	injection "knative.dev/pkg/injection"
 )

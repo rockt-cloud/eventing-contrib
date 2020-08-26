@@ -426,7 +426,7 @@ func (r *Reconciler) createClient(ctx context.Context, rc *v1alpha1.RocketmqChan
 	rocketmqClusterAdmin := r.rocketmqClusterAdmin
 	if rocketmqClusterAdmin == nil {
 		var err error
-		rocketmqClusterAdmin, err = resources.MakeClient(controllerAgentName, r.rocketmqConfig.BrokerAddr)
+		rocketmqClusterAdmin, err = resources.MakeClient(controllerAgentName, r.rocketmqConfig.Brokers)
 		if err != nil {
 			return nil, err
 		}
@@ -440,8 +440,9 @@ func (r *Reconciler) createTopic(ctx context.Context, channel *v1alpha1.Rocketmq
 	topicName := utils.TopicName(utils.RocketmqChannelSeparator, channel.Namespace, channel.Name)
 	logger.Info("Creating topic on Rocketmq cluster", zap.String("topic", topicName))
 	err := rocketmqClusterAdmin.CreateTopic(
-		WithTopicCreate(topicName),
-		WithBrokerAddrCreate("127.0.0.1:10911"),
+		context.TODO(),
+		admin.WithTopicCreate(topicName),
+		admin.WithBrokerAddrCreate("172.17.0.1:10911"),
 	)
 	if err != nil {
 		logger.Error("Error creating topic", zap.String("topic", topicName), zap.Error(err))
@@ -456,7 +457,10 @@ func (r *Reconciler) deleteTopic(ctx context.Context, channel *v1alpha1.Rocketmq
 
 	topicName := utils.TopicName(utils.RocketmqChannelSeparator, channel.Namespace, channel.Name)
 	logger.Info("Deleting topic on Rocketmq Cluster", zap.String("topic", topicName))
-	err := rocketmqClusterAdmin.DeleteTopic(WithTopicDelete(topicName))
+	err := rocketmqClusterAdmin.DeleteTopic(
+		context.TODO(),
+		admin.WithTopicDelete(topicName),
+	)
 	if err != nil {
 		logger.Error("Error creating topic", zap.String("topic", topicName), zap.Error(err))
 		return err

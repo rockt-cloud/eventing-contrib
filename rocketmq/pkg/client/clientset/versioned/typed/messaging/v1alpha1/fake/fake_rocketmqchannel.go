@@ -25,7 +25,7 @@ import (
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/apis/messaging/v1alpha1"
+	v1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/apis/messaging/v1alpha1"
 )
 
 // FakeRocketmqChannels implements RocketmqChannelInterface

@@ -33,6 +33,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: rocketmq-ch-dispatcher
+  labels:
+    contrib.eventing.knative.dev/release: devel
 subjects:
   - kind: ServiceAccount
     name: rocketmq-ch-dispatcher
@@ -42,3 +44,19 @@ roleRef:
   name: rocketmq-ch-dispatcher
   apiGroup: rbac.authorization.k8s.io
 
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rocketmq-webhook
+  labels:
+    contrib.eventing.knative.dev/release: devel
+subjects:
+  - kind: ServiceAccount
+    name: rocketmq-webhook
+    namespace: knative-eventing
+roleRef:
+  kind: ClusterRole
+  name: rocketmq-webhook
+  apiGroup: rbac.authorization.k8s.io

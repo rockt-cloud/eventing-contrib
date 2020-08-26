@@ -19,7 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions/internalinterfaces"
+	internalinterfaces "knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

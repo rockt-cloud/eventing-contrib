@@ -24,7 +24,7 @@ import (
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	messagingv1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/client/clientset/versioned/typed/messaging/v1alpha1"
+	messagingv1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/client/clientset/versioned/typed/messaging/v1alpha1"
 )
 
 type Interface interface {

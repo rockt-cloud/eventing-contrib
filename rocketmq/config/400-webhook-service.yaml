@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,24 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: v1
+kind: Service
 metadata:
-  name: rocketmq-channelable-manipulator
+  name: rocketmq-webhook
+  namespace: knative-eventing
   labels:
     contrib.eventing.knative.dev/release: devel
-    duck.knative.dev/channelable: "true"
-# Do not use this role directly. These rules will be added to the "channelable-manipulator" role.
-rules:
-  - apiGroups:
-      - messaging.knative.dev
-    resources:
-      - rocketmqchannels
-      - rocketmqchannels/status
-    verbs:
-      - create
-      - get
-      - list
-      - watch
-      - update
-      - patch
+    role: rocketmq-webhook
+spec:
+  ports:
+    - name: https-webhook
+      port: 443
+      targetPort: 8443
+  selector:
+    role: rocketmq-webhook

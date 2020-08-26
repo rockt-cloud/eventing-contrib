@@ -25,8 +25,8 @@ import (
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/apis/messaging/v1alpha1"
-	scheme "knative.dev/eventing-contrib/tmp2/pkg/client/clientset/versioned/scheme"
+	v1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/apis/messaging/v1alpha1"
+	scheme "knative.dev/eventing-contrib/rocketmq/pkg/client/clientset/versioned/scheme"
 )
 
 // RocketmqChannelsGetter has a method to return a RocketmqChannelInterface.

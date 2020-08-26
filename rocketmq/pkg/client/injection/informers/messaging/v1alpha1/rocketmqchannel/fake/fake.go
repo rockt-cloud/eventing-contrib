@@ -21,8 +21,8 @@ package fake
 import (
 	context "context"
 
-	fake "knative.dev/eventing-contrib/tmp2/pkg/client/injection/informers/factory/fake"
-	rocketmqchannel "knative.dev/eventing-contrib/tmp2/pkg/client/injection/informers/messaging/v1alpha1/rocketmqchannel"
+	fake "knative.dev/eventing-contrib/rocketmq/pkg/client/injection/informers/factory/fake"
+	rocketmqchannel "knative.dev/eventing-contrib/rocketmq/pkg/client/injection/informers/messaging/v1alpha1/rocketmqchannel"
 	controller "knative.dev/pkg/controller"
 	injection "knative.dev/pkg/injection"
 )

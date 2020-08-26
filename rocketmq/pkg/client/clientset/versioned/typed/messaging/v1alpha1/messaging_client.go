@@ -20,8 +20,8 @@ package v1alpha1
 
 import (
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/apis/messaging/v1alpha1"
-	"knative.dev/eventing-contrib/tmp2/pkg/client/clientset/versioned/scheme"
+	v1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/apis/messaging/v1alpha1"
+	"knative.dev/eventing-contrib/rocketmq/pkg/client/clientset/versioned/scheme"
 )
 
 type MessagingV1alpha1Interface interface {

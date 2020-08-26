@@ -24,7 +24,7 @@ import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	messagingv1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/apis/messaging/v1alpha1"
+	messagingv1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/apis/messaging/v1alpha1"
 )
 
 var scheme = runtime.NewScheme()

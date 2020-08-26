@@ -21,8 +21,8 @@ package factory
 import (
 	context "context"
 
-	externalversions "knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions"
-	client "knative.dev/eventing-contrib/tmp2/pkg/client/injection/client"
+	externalversions "knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions"
+	client "knative.dev/eventing-contrib/rocketmq/pkg/client/injection/client"
 	controller "knative.dev/pkg/controller"
 	injection "knative.dev/pkg/injection"
 	logging "knative.dev/pkg/logging"
@@ -50,7 +50,7 @@ func Get(ctx context.Context) externalversions.SharedInformerFactory {
 	untyped := ctx.Value(Key{})
 	if untyped == nil {
 		logging.FromContext(ctx).Panic(
-			"Unable to fetch knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions.SharedInformerFactory from context.")
+			"Unable to fetch knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions.SharedInformerFactory from context.")
 	}
 	return untyped.(externalversions.SharedInformerFactory)
 }

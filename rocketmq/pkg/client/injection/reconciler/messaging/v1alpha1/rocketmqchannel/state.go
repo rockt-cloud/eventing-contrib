@@ -23,7 +23,7 @@ import (
 
 	types "k8s.io/apimachinery/pkg/types"
 	cache "k8s.io/client-go/tools/cache"
-	v1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/apis/messaging/v1alpha1"
+	v1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/apis/messaging/v1alpha1"
 	reconciler "knative.dev/pkg/reconciler"
 )
 

@@ -12,24 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: rocketmq-channelable-manipulator
-  labels:
-    contrib.eventing.knative.dev/release: devel
-    duck.knative.dev/channelable: "true"
-# Do not use this role directly. These rules will be added to the "channelable-manipulator" role.
-rules:
-  - apiGroups:
-      - messaging.knative.dev
-    resources:
-      - rocketmqchannels
-      - rocketmqchannels/status
-    verbs:
-      - create
-      - get
-      - list
-      - watch
-      - update
-      - patch
+  name: config-rocketmq
+  namespace: knative-eventing
+data:
+  # Broker URL. Replace this with the URLs for your rocketmq cluster,
+  # which is in the format of my-cluster-rocketmq-bootstrap.my-rocketmq-namespace:9876.
+  bootstrapServers: 127.0.0.1:9876

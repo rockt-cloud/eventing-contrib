@@ -22,7 +22,7 @@ import (
 	context "context"
 
 	rest "k8s.io/client-go/rest"
-	versioned "knative.dev/eventing-contrib/tmp2/pkg/client/clientset/versioned"
+	versioned "knative.dev/eventing-contrib/rocketmq/pkg/client/clientset/versioned"
 	injection "knative.dev/pkg/injection"
 	logging "knative.dev/pkg/logging"
 )
@@ -43,7 +43,7 @@ func Get(ctx context.Context) versioned.Interface {
 	untyped := ctx.Value(Key{})
 	if untyped == nil {
 		logging.FromContext(ctx).Panic(
-			"Unable to fetch knative.dev/eventing-contrib/tmp2/pkg/client/clientset/versioned.Interface from context.")
+			"Unable to fetch knative.dev/eventing-contrib/rocketmq/pkg/client/clientset/versioned.Interface from context.")
 	}
 	return untyped.(versioned.Interface)
 }

@@ -36,6 +36,7 @@ import (
 
 	//"knative.dev/eventing-contrib/rocketmq/pkg/utils"
 
+	"knative.dev/eventing-contrib/rocketmq/pkg/utils"
 	eventingchannels "knative.dev/eventing/pkg/channel"
 	"knative.dev/eventing/pkg/channel/fanout"
 	"knative.dev/eventing/pkg/kncloudevents"
@@ -56,7 +57,7 @@ type RocketmqDispatcher struct {
 	// consumerUpdateLock must be used to update rocketmqConsumers
 	consumerUpdateLock sync.Mutex
 
-	topicFunc  string
+	topicFunc  TopicFunc
 	logger     *zap.Logger
 	brokerAddr []string
 }
@@ -100,16 +101,14 @@ func NewDispatcher(ctx context.Context, args *RocketmqDispatcherArgs) (*Rocketmq
 		subscriptions:         make(map[types.UID]Subscription),
 		rocketmqAsyncProducer: producer,
 		logger:                args.Logger,
-		//topicFunc:             args.TopicFunc,
-		topicFunc:  "TopicTest",
-		brokerAddr: args.BrokerAddr,
+		topicFunc:             args.TopicFunc,
+		brokerAddr:            args.BrokerAddr,
 	}
 	receiverFunc, err := eventingchannels.NewMessageReceiver(
 		func(ctx context.Context, channel eventingchannels.ChannelReference, message binding.Message, transformers []binding.Transformer, _ nethttp.Header) error {
 			// TODO: where to import Body
 			rocketmqProducerMessage := primitive.Message{
-				//Topic: dispatcher.topicFunc(utils.RocketmqChannelSeparator, channel.Namespace, channel.Name),
-				Topic: "TopicTest",
+				Topic: dispatcher.topicFunc(utils.RocketmqChannelSeparator, channel.Namespace, channel.Name),
 				Body:  []byte("Hello RocketMQ Go Client!"),
 			}
 
@@ -149,7 +148,7 @@ type TopicFunc func(separator, namespace, name string) string
 type RocketmqDispatcherArgs struct {
 	KnCEConnectionArgs *kncloudevents.ConnectionArgs
 	BrokerAddr         []string
-	TopicFunc          string
+	TopicFunc          TopicFunc
 	Logger             *zap.Logger
 }
 
@@ -339,7 +338,7 @@ func (d *RocketmqDispatcher) subscribe(channelRef eventingchannels.ChannelRefere
 		return consumer.ConsumeSuccess, nil
 	}
 
-	//topicName := d.topicFunc(utils.RocketmqChannelSeparator, channelRef.Namespace, channelRef.Name)
+	topicName := d.topicFunc(utils.RocketmqChannelSeparator, channelRef.Namespace, channelRef.Name)
 	groupID := fmt.Sprintf("rocketmq.%s.%s.%s", channelRef.Namespace, channelRef.Name, string(sub.UID))
 
 	pc, _ := rocketmq.NewPushConsumer(
@@ -350,7 +349,7 @@ func (d *RocketmqDispatcher) subscribe(channelRef eventingchannels.ChannelRefere
 		consumer.WithConsumerOrder(true),
 	)
 
-	err := pc.Subscribe("TopicTest", consumer.MessageSelector{}, RocketmqHandler)
+	err := pc.Subscribe(topicName, consumer.MessageSelector{}, RocketmqHandler)
 
 	if err != nil {
 		// we can not create a consumer - logging that, with reason

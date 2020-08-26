@@ -19,8 +19,8 @@ limitations under the License.
 package messaging
 
 import (
-	internalinterfaces "knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "knative.dev/eventing-contrib/tmp2/pkg/client/informers/externalversions/messaging/v1alpha1"
+	internalinterfaces "knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "knative.dev/eventing-contrib/rocketmq/pkg/client/informers/externalversions/messaging/v1alpha1"
 )
 
 // Interface provides access to each of this group's versions.
