@@ -1,14 +1,25 @@
-# Knative Sample Controller
+# Deployment steps
 
-[![GoDoc](https://godoc.org/knative.dev/sample-controller?status.svg)](https://godoc.org/knative.dev/sample-controller)
-[![Go Report Card](https://goreportcard.com/badge/knative/sample-controller)](https://goreportcard.com/report/knative/sample-controller)
 
-Knative `sample-controller` defines a few simple resources that are validated by
-webhook and managed by a controller to demonstrate the canonical style in which
-Knative writes controllers.
+```shell
+export KO_DOCKER_REPO=ko.local
+eval $(minikube docker-env)
+kubectl config use-context minikube
+ko apply -f config
+```
+See [ko doc](https://github.com/google/ko/blob/master/README.md#with-minikube) for details
 
-To learn more about Knative, please visit our
-[Knative docs](https://github.com/knative/docs) repository.
 
-If you are interested in contributing, see [CONTRIBUTING.md](./CONTRIBUTING.md)
-and [DEVELOPMENT.md](./DEVELOPMENT.md).
+# Test Process
+
+1. Setup [Rocketmq](https://rocketmq.apache.org/docs/quick-start/)
+2. Create the topic needed by test process manually like
+
+```shell
+bin/mqadmin updateTopic -t knative-messaging-rocketmq_test-namespace_test-rc -b 127.0.0.1:10911
+bin/mqadmin updateTopic -t knative-messaging-rocketmq_default_test-channel -b 127.0.0.1:10911
+bin/mqadmin updateTopic -t knative-messaging-rocketmq_default_test-channel-1 -b 127.0.0.1:10911
+bin/mqadmin updateTopic -t knative-messaging-rocketmq_default_test-channel-2 -b 127.0.0.1:10911
+```
+
+3. `go test` in `eventing-contrib/rocketmq` folder

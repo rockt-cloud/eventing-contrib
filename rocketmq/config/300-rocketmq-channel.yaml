@@ -23,7 +23,7 @@ metadata:
     duck.knative.dev/addressable: "true"
 spec:
   group: messaging.knative.dev
-  preserveUnknownFields: false
+  version: v1alpha1
   validation:
     openAPIV3Schema:
       type: object
@@ -38,7 +38,7 @@ spec:
     - messaging
     - channel
     shortNames:
-    - kc
+    - rc
   scope: Namespaced
   subresources:
     status: {}
@@ -55,7 +55,4 @@ spec:
     - name: Age
       type: date
       JSONPath: .metadata.creationTimestamp
-  versions:
-  - name: v1alpha1
-    served: true
-    storage: true
+
