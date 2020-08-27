@@ -17,30 +17,13 @@ limitations under the License.
 package main
 
 import (
-	"context"
-	"flag"
-	"os"
-
-	"knative.dev/pkg/configmap"
-	kncontroller "knative.dev/pkg/controller"
-	"knative.dev/pkg/injection"
 	"knative.dev/pkg/injection/sharedmain"
-	"knative.dev/pkg/signals"
 
 	"knative.dev/eventing-contrib/rocketmq/pkg/reconciler/controller"
 )
 
-const component = "rocketmqchannel_controller"
+const component = "rocketmqchannel-controller"
 
 func main() {
-	flag.Parse()
-	ctx := signals.NewContext()
-	ns := os.Getenv("NAMESPACE")
-	if ns != "" {
-		ctx = injection.WithNamespaceScope(ctx, ns)
-	}
-
-	sharedmain.MainWithContext(ctx, component, func(ctx context.Context, watcher configmap.Watcher) *kncontroller.Impl {
-		return controller.NewController(ctx)
-	})
+	sharedmain.Main(component, controller.NewController)
 }

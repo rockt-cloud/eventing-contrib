@@ -20,7 +20,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"knative.dev/pkg/apis"
-	"knative.dev/pkg/apis/duck/v1alpha1"
+	duckv1 "knative.dev/pkg/apis/duck/v1"
 )
 
 var rc = apis.NewLivingConditionSet(
@@ -51,7 +51,7 @@ const (
 	RocketmqChannelConditionEndpointsReady apis.ConditionType = "EndpointsReady"
 
 	// RocketmqChannelConditionAddressable has status true when this RocketmqChannel meets
-	// the Addressable contract and has a non-empty hostname.
+	// the Addressable contract and has a non-empty URL.
 	RocketmqChannelConditionAddressable apis.ConditionType = "Addressable"
 
 	// RocketmqChannelConditionChannelServiceReady has status True when a k8s Service representing the channel is ready.
@@ -89,16 +89,14 @@ func (cs *RocketmqChannelStatus) InitializeConditions() {
 // SetAddress sets the address (as part of Addressable contract) and marks the correct condition.
 func (cs *RocketmqChannelStatus) SetAddress(url *apis.URL) {
 	if cs.Address == nil {
-		cs.Address = &v1alpha1.Addressable{}
+		cs.Address = &duckv1.Addressable{}
 	}
 	if url != nil {
-		cs.Address.Hostname = url.Host
 		cs.Address.URL = url
 		rc.Manage(cs).MarkTrue(RocketmqChannelConditionAddressable)
 	} else {
-		cs.Address.Hostname = ""
 		cs.Address.URL = nil
-		rc.Manage(cs).MarkFalse(RocketmqChannelConditionAddressable, "EmptyHostname", "hostname is the empty string")
+		rc.Manage(cs).MarkFalse(RocketmqChannelConditionAddressable, "EmptyURL", "URL is nil")
 	}
 }
 

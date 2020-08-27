@@ -20,10 +20,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	eventingduck "knative.dev/eventing/pkg/apis/duck/v1alpha1"
+	eventingduck "knative.dev/eventing/pkg/apis/duck/v1"
 	"knative.dev/pkg/apis"
 	duckv1 "knative.dev/pkg/apis/duck/v1"
-	duckv1alpha1 "knative.dev/pkg/apis/duck/v1alpha1"
+	"knative.dev/pkg/kmeta"
 )
 
 // +genclient
@@ -45,34 +45,30 @@ type RocketmqChannel struct {
 	Status RocketmqChannelStatus `json:"status,omitempty"`
 }
 
-// Check that Channel can be validated, can be defaulted, and has immutable fields.
-var _ apis.Validatable = (*RocketmqChannel)(nil)
-var _ apis.Defaultable = (*RocketmqChannel)(nil)
-var _ runtime.Object = (*RocketmqChannel)(nil)
-var _ duckv1.KRShaped = (*RocketmqChannel)(nil)
+var (
+	// Check that this channel can be validated and defaulted.
+	_ apis.Validatable = (*RocketmqChannel)(nil)
+	_ apis.Defaultable = (*RocketmqChannel)(nil)
+
+	_ runtime.Object = (*RocketmqChannel)(nil)
+
+	// Check that we can create OwnerReferences to an this channel.
+	_ kmeta.OwnerRefable = (*RocketmqChannel)(nil)
+
+	// Check that the type conforms to the duck Knative Resource shape.
+	_ duckv1.KRShaped = (*RocketmqChannel)(nil)
+)
 
 // RocketmqChannelSpec defines the specification for a RocketmqChannel.
 type RocketmqChannelSpec struct {
-	// RocketmqChannel conforms to Duck type Subscribable.
-	Subscribable *eventingduck.Subscribable `json:"subscribable,omitempty"`
+	// Channel conforms to Duck type Channelable.
+	eventingduck.ChannelableSpec `json:",inline"`
 }
 
 // RocketmqChannelStatus represents the current state of a RocketmqChannel.
 type RocketmqChannelStatus struct {
-	// inherits duck/v1 Status, which currently provides:
-	// * ObservedGeneration - the 'Generation' of the Service that was last processed by the controller.
-	// * Conditions - the latest available observations of a resource's current state.
-	duckv1.Status `json:",inline"`
-
-	// RocketmqChannel is Addressable. It currently exposes the endpoint as a
-	// fully-qualified DNS name which will distribute traffic over the
-	// provided targets from inside the cluster.
-	//
-	// It generally has the form {channel}.{namespace}.svc.{cluster domain name}
-	duckv1alpha1.AddressStatus `json:",inline"`
-
-	// Subscribers is populated with the statuses of each of the Channelable's subscribers.
-	eventingduck.SubscribableTypeStatus `json:",inline"`
+	// Channel conforms to Duck type Channelable.
+	eventingduck.ChannelableStatus `json:",inline"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

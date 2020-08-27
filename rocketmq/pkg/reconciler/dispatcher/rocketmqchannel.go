@@ -74,7 +74,15 @@ func NewController(ctx context.Context, _ configmap.Watcher) *controller.Impl {
 
 	logger := logging.FromContext(ctx)
 
-	rocketmqConfig := utils.GetRocketmqConfig()
+	configMap, err := configmap.Load("/etc/config-rocketmq")
+	if err != nil {
+		logger.Fatal("error loading configuration", zap.Error(err))
+	}
+
+	rocketmqConfig, err := utils.GetRocketmqConfig(configMap)
+	if err != nil {
+		logger.Fatal("Error loading rocketmq config", zap.Error(err))
+	}
 	connectionArgs := &kncloudevents.ConnectionArgs{
 		MaxIdleConns:        int(rocketmqConfig.MaxIdleConns),
 		MaxIdleConnsPerHost: int(rocketmqConfig.MaxIdleConnsPerHost),
@@ -83,8 +91,7 @@ func NewController(ctx context.Context, _ configmap.Watcher) *controller.Impl {
 	rocketmqChannelInformer := rocketmqchannel.Get(ctx)
 	args := &dispatcher.RocketmqDispatcherArgs{
 		KnCEConnectionArgs: connectionArgs,
-		ClientID:           "rocketmq-ch-dispatcher",
-		Brokers:            rocketmqConfig.Brokers,
+		BrokerAddr:         rocketmqConfig.Brokers,
 		TopicFunc:          utils.TopicName,
 		Logger:             logger,
 	}
@@ -101,7 +108,7 @@ func NewController(ctx context.Context, _ configmap.Watcher) *controller.Impl {
 		rocketmqchannelLister:   rocketmqChannelInformer.Lister(),
 		rocketmqchannelInformer: rocketmqChannelInformer.Informer(),
 	}
-	r.impl = kafkachannelreconciler.NewImpl(ctx, r)
+	r.impl = rocketmqchannelreconciler.NewImpl(ctx, r)
 
 	logger.Info("Setting up event handlers")
 
@@ -151,17 +158,12 @@ func (r *Reconciler) ReconcileKind(ctx context.Context, rc *v1alpha1.RocketmqCha
 		return err
 	}
 
-	failedSubscriptions, err := r.rocketmqDispatcher.UpdateRocketmqConsumers(ctx, config)
+	failedSubscriptions, err := r.rocketmqDispatcher.UpdateRocketmqConsumers(config)
 	if err != nil {
 		logging.FromContext(ctx).Error("Error updating rocketmq consumers in dispatcher")
 		return err
 	}
-	for k, v := range failedSubscriptions {
-		newSub := eventingduckv1alpha1.SubscriberSpec{}
-		newSub.ConvertFrom(context.TODO(), k)
-		failedSubscriptions[newSub] = v
-	}
-	rc.Status.SubscribableTypeStatus.SubscribableStatus = r.createSubscribableStatus(&rc.Spec.SubscribableSpec, failedSubscriptions)
+	rc.Status.SubscribableStatus = r.createSubscribableStatus(&rc.Spec.SubscribableSpec, failedSubscriptions)
 	if len(failedSubscriptions) > 0 {
 		logging.FromContext(ctx).Error("Some rocketmq subscriptions failed to subscribe")
 		return fmt.Errorf("Some rocketmq subscriptions failed to subscribe")

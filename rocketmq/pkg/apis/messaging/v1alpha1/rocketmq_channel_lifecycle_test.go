@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Knative Authors
+Copyright 2020 The Knative Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,9 +25,8 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
+	eventingduckv1 "knative.dev/eventing/pkg/apis/duck/v1"
 	duckv1 "knative.dev/pkg/apis/duck/v1"
-	duckv1alpha1 "knative.dev/pkg/apis/duck/v1alpha1"
-	duckv1beta1 "knative.dev/pkg/apis/duck/v1beta1"
 )
 
 var condReady = apis.Condition{
@@ -74,9 +73,11 @@ func TestChannelGetCondition(t *testing.T) {
 	}{{
 		name: "single condition",
 		cs: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{
-					condReady,
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{
+						condReady,
+					},
 				},
 			},
 		},
@@ -85,10 +86,12 @@ func TestChannelGetCondition(t *testing.T) {
 	}, {
 		name: "unknown condition",
 		cs: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{
-					condReady,
-					condDispatcherNotReady,
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{
+						condReady,
+						condDispatcherNotReady,
+					},
 				},
 			},
 		},
@@ -114,110 +117,120 @@ func TestChannelInitializeConditions(t *testing.T) {
 		name: "empty",
 		cs:   &RocketmqChannelStatus{},
 		want: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{{
-					Type:   RocketmqChannelConditionAddressable,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionChannelServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionConfigReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionDispatcherReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionEndpointsReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionTopicReady,
-					Status: corev1.ConditionUnknown,
-				}},
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{{
+						Type:   RocketmqChannelConditionAddressable,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionChannelServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionConfigReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionDispatcherReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionEndpointsReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionTopicReady,
+						Status: corev1.ConditionUnknown,
+					}},
+				},
 			},
 		},
 	}, {
 		name: "one false",
 		cs: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{{
-					Type:   RocketmqChannelConditionDispatcherReady,
-					Status: corev1.ConditionFalse,
-				}},
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{{
+						Type:   RocketmqChannelConditionDispatcherReady,
+						Status: corev1.ConditionFalse,
+					}},
+				},
 			},
 		},
 		want: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{{
-					Type:   RocketmqChannelConditionAddressable,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionChannelServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionConfigReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionDispatcherReady,
-					Status: corev1.ConditionFalse,
-				}, {
-					Type:   RocketmqChannelConditionEndpointsReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionTopicReady,
-					Status: corev1.ConditionUnknown,
-				}},
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{{
+						Type:   RocketmqChannelConditionAddressable,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionChannelServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionConfigReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionDispatcherReady,
+						Status: corev1.ConditionFalse,
+					}, {
+						Type:   RocketmqChannelConditionEndpointsReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionTopicReady,
+						Status: corev1.ConditionUnknown,
+					}},
+				},
 			},
 		},
 	}, {
 		name: "one true",
 		cs: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{{
-					Type:   RocketmqChannelConditionDispatcherReady,
-					Status: corev1.ConditionTrue,
-				}},
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{{
+						Type:   RocketmqChannelConditionDispatcherReady,
+						Status: corev1.ConditionTrue,
+					}},
+				},
 			},
 		},
 		want: &RocketmqChannelStatus{
-			Status: duckv1.Status{
-				Conditions: []apis.Condition{{
-					Type:   RocketmqChannelConditionAddressable,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionChannelServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionConfigReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionDispatcherReady,
-					Status: corev1.ConditionTrue,
-				}, {
-					Type:   RocketmqChannelConditionEndpointsReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionServiceReady,
-					Status: corev1.ConditionUnknown,
-				}, {
-					Type:   RocketmqChannelConditionTopicReady,
-					Status: corev1.ConditionUnknown,
-				}},
+			ChannelableStatus: eventingduckv1.ChannelableStatus{
+				Status: duckv1.Status{
+					Conditions: []apis.Condition{{
+						Type:   RocketmqChannelConditionAddressable,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionChannelServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionConfigReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionDispatcherReady,
+						Status: corev1.ConditionTrue,
+					}, {
+						Type:   RocketmqChannelConditionEndpointsReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionServiceReady,
+						Status: corev1.ConditionUnknown,
+					}, {
+						Type:   RocketmqChannelConditionTopicReady,
+						Status: corev1.ConditionUnknown,
+					}},
+				},
 			},
 		},
 	}}
@@ -366,45 +379,47 @@ func TestRocketmqChannelStatus_SetAddressable(t *testing.T) {
 	}{
 		"empty string": {
 			want: &RocketmqChannelStatus{
-				Status: duckv1.Status{
-					Conditions: []apis.Condition{
-						{
-							Type:   RocketmqChannelConditionAddressable,
-							Status: corev1.ConditionFalse,
-						},
-						// Note that Ready is here because when the condition is marked False, duck
-						// automatically sets Ready to false.
-						{
-							Type:   RocketmqChannelConditionReady,
-							Status: corev1.ConditionFalse,
+				ChannelableStatus: eventingduckv1.ChannelableStatus{
+					Status: duckv1.Status{
+						Conditions: []apis.Condition{
+							{
+								Type:   RocketmqChannelConditionAddressable,
+								Status: corev1.ConditionFalse,
+							},
+							// Note that Ready is here because when the condition is marked False, duck
+							// automatically sets Ready to false.
+							{
+								Type:   RocketmqChannelConditionReady,
+								Status: corev1.ConditionFalse,
+							},
 						},
 					},
+					AddressStatus: duckv1.AddressStatus{Address: &duckv1.Addressable{}},
 				},
-				AddressStatus: duckv1alpha1.AddressStatus{Address: &duckv1alpha1.Addressable{}},
 			},
 		},
 		"has domain": {
 			url: &apis.URL{Scheme: "http", Host: "test-domain"},
 			want: &RocketmqChannelStatus{
-				AddressStatus: duckv1alpha1.AddressStatus{
-					Address: &duckv1alpha1.Addressable{
-						Addressable: duckv1beta1.Addressable{
+				ChannelableStatus: eventingduckv1.ChannelableStatus{
+					AddressStatus: duckv1.AddressStatus{
+						Address: &duckv1.Addressable{
 							URL: &apis.URL{
 								Scheme: "http",
 								Host:   "test-domain",
 							},
 						},
-						Hostname: "test-domain",
-					}},
-				Status: duckv1.Status{
-					Conditions: []apis.Condition{{
-						Type:   RocketmqChannelConditionAddressable,
-						Status: corev1.ConditionTrue,
-					}, {
-						// Ready unknown comes from other dependent conditions via MarkTrue.
-						Type:   RocketmqChannelConditionReady,
-						Status: corev1.ConditionUnknown,
-					}},
+					},
+					Status: duckv1.Status{
+						Conditions: []apis.Condition{{
+							Type:   RocketmqChannelConditionAddressable,
+							Status: corev1.ConditionTrue,
+						}, {
+							// Ready unknown comes from other dependent conditions via MarkTrue.
+							Type:   RocketmqChannelConditionReady,
+							Status: corev1.ConditionUnknown,
+						}},
+					},
 				},
 			},
 		},
