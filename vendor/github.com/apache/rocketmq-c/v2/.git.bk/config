@@ -1,0 +1,26 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/yiyiyimu/rocketmq-client-go
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "upstream"]
+	url = https://github.com/apache/rocketmq-client-go.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*
+[remote "xujianhai"]
+	url = http://github.com/xujianhai666/rocketmq-client-go.git
+	fetch = +refs/heads/*:refs/remotes/xujianhai/*
+[branch "xujianhai-admin"]
+	remote = xujianhai
+	merge = refs/heads/feat-apache-admin
+[branch "travis-test"]
+	remote = origin
+	merge = refs/heads/travis-test
+[branch "topic"]
+	remote = origin
+	merge = refs/heads/topic
