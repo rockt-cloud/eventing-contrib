@@ -1,5 +1,8 @@
-# Deployment steps
+# Apache Rocketmq Channels
 
+Rocketmq channels are those backed by [Apache Rocketmq](https://rocketmq.apache.org/) topics.
+
+# Deployment steps
 
 ```shell
 export KO_DOCKER_REPO=ko.local
