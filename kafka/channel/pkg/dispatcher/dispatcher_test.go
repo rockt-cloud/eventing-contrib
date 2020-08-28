@@ -374,7 +374,6 @@ func TestDispatcher_UpdateConfig(t *testing.T) {
 			if diff := cmp.Diff(tc.newHostToChanMap, d.getHostToChannelMap()); diff != "" {
 				t.Errorf("unexpected hostToChannelMap (-want, +got) = %v", diff)
 			}
-			t.Errorf(tc.name)
 
 		})
 	}
