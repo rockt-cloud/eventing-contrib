@@ -44,7 +44,7 @@ kubectl get pods --namespace knative-eventing
 ### 5. Configure RocketmqChannel
 #### Creating a `RocketmqChannel` CRD
 ```shell
-kubectl apply -f demo/000-rocketmqchannelcrd.yaml
+kubectl apply -f demo/000-rocketmqchannel_crd.yaml
 ```
 #### Specifying the default channel configuration
 ```shell
