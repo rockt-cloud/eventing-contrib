@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-br-defaults
+  namespace: knative-eventing
+data:
+  default-br-config: |
+    # This is the cluster-wide default broker channel.
+    clusterDefault:
+      brokerClass: MTChannelBasedBroker
+      apiVersion: v1
+      kind: ConfigMap
+      name: rocketmq-channel
+      namespace: knative-eventing
+    # This allows you to specify different defaults per-namespace,
+    # in this case the "some-namespace" namespace will use the RocketMQ
+    # channel ConfigMap by default.
+    namespaceDefaults:
+      some-namespace:
+        brokerClass: MTChannelBasedBroker
+        apiVersion: v1
+        kind: ConfigMap
+        name: rocketmq-channel
+        namespace: knative-eventing
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rocketmq-channel
+  namespace: knative-eventing
+data:
+  channelTemplateSpec: |
+    apiVersion: messaging.knative.dev/v1alpha1
+    kind: RocketmqChannel

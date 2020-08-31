@@ -4,8 +4,8 @@ Rocketmq channels are those backed by [Apache Rocketmq](https://rocketmq.apache.
 
 ## Deployment steps
 
-### 1. Start RocketMQ
-See Apache RocketMQ [quick start doc](https://rocketmq.apache.org/docs/quick-start/) for detail.
+### 1. Install and start RocketMQ
+See Apache RocketMQ operator[quick start doc](https://github.com/apache/rocketmq-operator#quick-start) for detail.
 
 Return to `/HOME/go/src/knative.dev/eventing-contrib/rocketmq/`.
 
@@ -31,10 +31,10 @@ kubectl config use-context minikube
 ko apply -f config
 ```
 
-### 4. Install Eventing Brokers (use InMemoryChannel-based broker)
+### 4. Install Eventing Brokers based on RocketMQ Channel
 ```shell
-kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/in-memory-channel.yaml
 kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/mt-channel-broker.yaml
+kubectl apply --filename demo/broker.yaml
 ```
 Monitor until all of the components show a STATUS of Running
 ```shell
@@ -44,7 +44,7 @@ kubectl get pods --namespace knative-eventing
 ### 5. Configure RocketmqChannel
 #### Creating a `RocketmqChannel` CRD
 ```shell
-kubectl apply -f demo/000-rocketmqchannel_crd.yaml
+kubectl apply -f demo/000-rocketmqchannel-crd.yaml
 ```
 #### Specifying the default channel configuration
 ```shell
@@ -63,22 +63,22 @@ kubectl -n event-example get broker default
 ```
 #### Creating simple event consumer
 ```shell
-kubectl -n event-example apply -f demo/101_createConsumer.yaml
+kubectl -n event-example apply -f demo/101-createConsumer.yaml
 ```
 #### Creating trigger, which defines the events that each event consumer receives
 ```shell
-kubectl -n event-example apply -f demo/102_createTrigger.yaml
+kubectl -n event-example apply -f demo/102-createTrigger.yaml
 ```
 #### Creating simple event producer which could execute the `curl` command
 ```shell
-kubectl -n event-example apply -f demo/103_createProducer.yaml
+kubectl -n event-example apply -f demo/103-createProducer.yaml
 ```
 #### Sending events to the broker
 SSH into pod
 ```shell
 kubectl -n event-example attach curl -it
 ```
-and make a HTTP Request to the broker by sending command in demo/104_sendEvent.sh.
+and make a HTTP Request to the broker by sending command in demo/104-sendEvent.sh.
 If the event has been received, you will receive a `202 Accepted` response like:
 ```shell
 < HTTP/1.1 202 Accepted
