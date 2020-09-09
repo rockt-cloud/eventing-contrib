@@ -58,7 +58,7 @@ const (
 	rcName                = "test-rc"
 	testDispatcherImage   = "test-image"
 	channelServiceAddress = "test-rc-rn-channel.test-namespace.svc.cluster.local"
-	brokerName            = "127.0.0.1:9876"
+	brokerName            = "172.17.0.1:10911"
 	finalizerName         = "rocketmqchannels.messaging.knative.dev"
 )
 

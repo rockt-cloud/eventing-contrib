@@ -89,7 +89,7 @@ func (sub Subscription) String() string {
 func NewDispatcher(ctx context.Context, args *RocketmqDispatcherArgs) (*RocketmqDispatcher, error) {
 
 	producer, _ := rocketmq.NewProducer(
-		producer.WithNsResovler(primitive.NewPassthroughResolver(args.BrokerAddr)),
+		producer.WithNsResovler(primitive.NewPassthroughResolver([]string{"172.17.0.3:9876"})),
 		producer.WithRetry(2),
 		producer.WithQueueSelector(producer.NewManualQueueSelector()),
 	)
@@ -343,7 +343,7 @@ func (d *RocketmqDispatcher) subscribe(channelRef eventingchannels.ChannelRefere
 
 	pc, _ := rocketmq.NewPushConsumer(
 		consumer.WithGroupName(groupID),
-		consumer.WithNsResovler(primitive.NewPassthroughResolver([]string{"127.0.0.1:9876"})),
+		consumer.WithNsResovler(primitive.NewPassthroughResolver([]string{"172.17.0.3:9876"})),
 		consumer.WithConsumerModel(consumer.Clustering),
 		consumer.WithConsumeFromWhere(consumer.ConsumeFromFirstOffset),
 		consumer.WithConsumerOrder(true),

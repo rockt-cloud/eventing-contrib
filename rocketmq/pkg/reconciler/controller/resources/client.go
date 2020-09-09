@@ -22,6 +22,6 @@ import (
 )
 
 func MakeClient(clientID string, bootstrapServers []string) (admin.Admin, error) {
-	//bootstrapServers := []string{"127.0.0.1:9876"}
+	bootstrapServers = []string{"172.17.0.3:9876"}
 	return admin.NewAdmin(admin.WithResolver(primitive.NewPassthroughResolver(bootstrapServers)))
 }

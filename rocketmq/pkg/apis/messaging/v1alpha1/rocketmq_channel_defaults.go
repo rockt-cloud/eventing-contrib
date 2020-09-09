@@ -18,10 +18,18 @@ package v1alpha1
 
 import (
 	"context"
+
+	"knative.dev/eventing/pkg/apis/messaging"
 )
 
 // SetDefaults implements apis.Defaultable
 func (c *RocketmqChannel) SetDefaults(ctx context.Context) {
+	if c.Annotations == nil {
+		c.Annotations = make(map[string]string)
+	}
+	if _, ok := c.Annotations[messaging.SubscribableDuckVersionAnnotation]; !ok {
+		c.Annotations[messaging.SubscribableDuckVersionAnnotation] = "v1"
+	}
 	c.Spec.SetDefaults(ctx)
 }
 

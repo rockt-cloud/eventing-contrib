@@ -442,7 +442,7 @@ func (r *Reconciler) createTopic(ctx context.Context, channel *v1alpha1.Rocketmq
 	err := rocketmqClusterAdmin.CreateTopic(
 		context.TODO(),
 		admin.WithTopicCreate(topicName),
-		admin.WithBrokerAddrCreate("127.0.0.1:10911"),
+		admin.WithBrokerAddrCreate("172.18.0.4:10911"),
 	)
 	if err != nil {
 		logger.Error("Error creating topic", zap.String("topic", topicName), zap.Error(err))

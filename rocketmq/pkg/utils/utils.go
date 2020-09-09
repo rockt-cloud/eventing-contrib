@@ -35,7 +35,7 @@ const (
 
 	DefaultMaxIdleConns        = 1000
 	DefaultMaxIdleConnsPerHost = 100
-	DefaultBrokers             = "127.0.0.1:9876"
+	DefaultBrokers             = "172.18.0.4:10911"
 )
 
 type RocketmqConfig struct {

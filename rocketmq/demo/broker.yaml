@@ -12,16 +12,6 @@ data:
       kind: ConfigMap
       name: rocketmq-channel
       namespace: knative-eventing
-    # This allows you to specify different defaults per-namespace,
-    # in this case the "some-namespace" namespace will use the RocketMQ
-    # channel ConfigMap by default.
-    namespaceDefaults:
-      some-namespace:
-        brokerClass: MTChannelBasedBroker
-        apiVersion: v1
-        kind: ConfigMap
-        name: rocketmq-channel
-        namespace: knative-eventing
 
 ---
 

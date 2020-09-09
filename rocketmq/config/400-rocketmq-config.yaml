@@ -20,4 +20,4 @@ metadata:
 data:
   # Broker URL. Replace this with the URLs for your rocketmq cluster,
   # which is in the format of my-cluster-rocketmq-bootstrap.my-rocketmq-namespace:9876.
-  bootstrapServers: 127.0.0.1:9876
+  bootstrapServers: 172.18.0.4:10911
