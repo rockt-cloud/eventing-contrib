@@ -1,0 +1,18 @@
+0000000000000000000000000000000000000000 92999ee5e3868295048974c3481d32099fe8d262 yiyiyimu <wosoyoung@gmail.com> 1595238059 +0800	branch: Created from HEAD
+92999ee5e3868295048974c3481d32099fe8d262 472ff5d679d79c6db3e141816a19f92e30818d6b yiyiyimu <wosoyoung@gmail.com> 1595238099 +0800	pull origin travis-test: Merge made by the 'recursive' strategy.
+472ff5d679d79c6db3e141816a19f92e30818d6b aea5df9b370350ad4b7f62789527ac260ea10105 yiyiyimu <wosoyoung@gmail.com> 1595238186 +0800	commit: Trigger2
+aea5df9b370350ad4b7f62789527ac260ea10105 6d1780dba83aecd61aba7d54cf9d0103015de125 yiyiyimu <wosoyoung@gmail.com> 1595345269 +0800	commit: test admin
+6d1780dba83aecd61aba7d54cf9d0103015de125 a9eb38a6a9830a673f5ee81045fe8d677e7d887a yiyiyimu <wosoyoung@gmail.com> 1595345324 +0800	commit: replace decode with unmarshal
+a9eb38a6a9830a673f5ee81045fe8d677e7d887a fb037d31baaca7cbb2b66c51c9a094d9368e9c78 yiyiyimu <wosoyoung@gmail.com> 1595345947 +0800	commit: replace decode with unmarshal
+fb037d31baaca7cbb2b66c51c9a094d9368e9c78 6c7a8649fefe40cfb7ceb2893e2e6a79bc730ac5 yiyiyimu <wosoyoung@gmail.com> 1595346006 +0800	commit: test admin
+6c7a8649fefe40cfb7ceb2893e2e6a79bc730ac5 6e8d60a8eb050f4485d377205563460995b83a67 yiyiyimu <wosoyoung@gmail.com> 1595346853 +0800	commit: test admin
+6e8d60a8eb050f4485d377205563460995b83a67 fba11ce1c5bdbe20e360d7426986e8e2d586615e yiyiyimu <wosoyoung@gmail.com> 1595347348 +0800	commit: test admin
+fba11ce1c5bdbe20e360d7426986e8e2d586615e 9b34a429215ee86e3be2e2a2274c0bbacf0b14e7 yiyiyimu <wosoyoung@gmail.com> 1595347653 +0800	commit: replace decode with unmarshal
+9b34a429215ee86e3be2e2a2274c0bbacf0b14e7 3d4b43c6841e74355bd5b8700e5d33146a1a0bb5 yiyiyimu <wosoyoung@gmail.com> 1595390867 +0800	commit: add test
+3d4b43c6841e74355bd5b8700e5d33146a1a0bb5 1350cb45a72d8c39c4a38c91531e25912f64187a yiyiyimu <wosoyoung@gmail.com> 1595405537 +0800	commit: brokername
+1350cb45a72d8c39c4a38c91531e25912f64187a ad40861813d63f019b7cce86cd0ea36b6e7c8373 yiyiyimu <wosoyoung@gmail.com> 1595405771 +0800	commit: brokername
+ad40861813d63f019b7cce86cd0ea36b6e7c8373 b18cf922b131bed68cc408c04f218028d34c9b35 yiyiyimu <wosoyoung@gmail.com> 1595406177 +0800	commit: brokername
+b18cf922b131bed68cc408c04f218028d34c9b35 0280ee429465500d0d12fbef1e5b5e81d804e7f5 yiyiyimu <wosoyoung@gmail.com> 1595429791 +0800	commit: localhost
+0280ee429465500d0d12fbef1e5b5e81d804e7f5 ad53c518cb0c92efaed53a820fce68e2a168ff13 yiyiyimu <wosoyoung@gmail.com> 1595491172 +0800	commit: ready to pr
+ad53c518cb0c92efaed53a820fce68e2a168ff13 86a6877b2228b9fa96f3bbae81d195ef9dc3252c yiyiyimu <wosoyoung@gmail.com> 1595498652 +0800	commit: port test
+86a6877b2228b9fa96f3bbae81d195ef9dc3252c 847070d0d0f779dcc358af5edeabb0670a0c4b26 yiyiyimu <wosoyoung@gmail.com> 1595498913 +0800	commit: port test

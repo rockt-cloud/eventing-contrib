@@ -12,12 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
 metadata:
-  name: config-kafka
-  namespace: knative-eventing
-data:
-  # Broker URL. Replace this with the URLs for your kafka cluster,
-  # which is in the format of my-cluster-kafka-bootstrap.my-kafka-namespace:9092.
-  bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
+  name: rocketmq-channelable-manipulator
+  labels:
+    contrib.eventing.knative.dev/release: devel
+    duck.knative.dev/channelable: "true"
+# Do not use this role directly. These rules will be added to the "channelable-manipulator" role.
+rules:
+  - apiGroups:
+      - messaging.knative.dev
+    resources:
+      - rocketmqchannels
+      - rocketmqchannels/status
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - patch
