@@ -86,7 +86,7 @@ func NewController(
 
 	impl := rocketmqChannelReconciler.NewImpl(ctx, r)
 
-	// Get and Watch the Kakfa config map and dynamically update Rocketmq configuration.
+	// Get and Watch the Rocketmq config map and dynamically update Rocketmq configuration.
 	if _, err := kubeclient.Get(ctx).CoreV1().ConfigMaps(system.Namespace()).Get("config-rocketmq", metav1.GetOptions{}); err == nil {
 		cmw.Watch("config-rocketmq", func(configMap *v1.ConfigMap) {
 			r.updateRocketmqConfig(ctx, configMap)

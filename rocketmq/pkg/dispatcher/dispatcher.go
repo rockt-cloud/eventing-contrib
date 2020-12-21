@@ -106,10 +106,8 @@ func NewDispatcher(ctx context.Context, args *RocketmqDispatcherArgs) (*Rocketmq
 	}
 	receiverFunc, err := eventingchannels.NewMessageReceiver(
 		func(ctx context.Context, channel eventingchannels.ChannelReference, message binding.Message, transformers []binding.Transformer, _ nethttp.Header) error {
-			// TODO: where to import Body
 			rocketmqProducerMessage := primitive.Message{
 				Topic: dispatcher.topicFunc(utils.RocketmqChannelSeparator, channel.Namespace, channel.Name),
-				Body:  []byte("Hello RocketMQ Go Client!"),
 			}
 
 			dispatcher.logger.Debug("Received a new message from MessageReceiver, dispatching to Rocketmq", zap.Any("channel", channel))
@@ -119,16 +117,16 @@ func NewDispatcher(ctx context.Context, args *RocketmqDispatcherArgs) (*Rocketmq
 			}
 
 			err = dispatcher.rocketmqAsyncProducer.SendAsync(ctx,
-				func(ctx context.Context, result *primitive.SendResult, e error) {
-					if e != nil {
-						fmt.Errorf("receive message error: %s", err)
+				func(ctx context.Context, result *primitive.SendResult, err error) {
+					if err != nil {
+						fmt.Printf("receive message error: %s", err)
 					} else {
-						fmt.Errorf("send message success: result=%s", result.String())
+						fmt.Printf("send message success: result=%s", result.String())
 					}
 				}, &rocketmqProducerMessage)
 
 			if err != nil {
-				fmt.Errorf("send message error: %s", err)
+				return fmt.Errorf("send message error: %s", err)
 			}
 			return nil
 		},
@@ -279,7 +277,6 @@ func (d *RocketmqDispatcher) RemoveConsumers() error {
 
 // Start starts the rocketmq dispatcher's message processing.
 func (d *RocketmqDispatcher) Start(ctx context.Context) error {
-	return fmt.Errorf("message receiver is not set: %v", d)
 	if d.receiver == nil {
 		return fmt.Errorf("message receiver is not set")
 	}
@@ -290,7 +287,7 @@ func (d *RocketmqDispatcher) Start(ctx context.Context) error {
 
 	err := d.rocketmqAsyncProducer.Start()
 	if err != nil {
-		fmt.Errorf("start producer error: %s", err.Error())
+		return fmt.Errorf("start producer error: %s", err.Error())
 	}
 
 	return d.receiver.Start(ctx)
